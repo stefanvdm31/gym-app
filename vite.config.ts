@@ -7,8 +7,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 // Staat de repo anders? Wijzig alleen deze regel (of zet BASE_PATH in je omgeving).
 const BASE_PATH = process.env.BASE_PATH ?? '/gym-app/'
 
-export default defineConfig(({ command }) => ({
-  base: command === 'build' ? BASE_PATH : '/',
+export default defineConfig(({ command, isPreview }) => ({
+  // Tijdens ontwikkelen draait de app op http://localhost:5173/ ; de gebouwde
+  // versie (en dus ook `npm run preview`) op het pad hierboven.
+  base: command === 'build' || isPreview === true ? BASE_PATH : '/',
   plugins: [
     react(),
     tailwindcss(),

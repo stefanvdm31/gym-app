@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 
@@ -103,13 +103,17 @@ function SetsTraining({ sessie }: { sessie: Session }) {
     return () => window.clearInterval(interval)
   }, [sessie.startTijd])
 
-  // Spring automatisch naar de eerste oefening die nog niet af is.
+  // Bij het openen (en bij het hervatten van een onderbroken training) springen
+  // we naar de eerste oefening die nog niet af is. Daarna niet meer: anders
+  // zou de app je wegtrekken terwijl je ergens anders iets aan het corrigeren
+  // bent.
+  const gesprongen = useRef(false)
   useEffect(() => {
-    const eerste = entries.findIndex(
-      (e) => !e.overgeslagen && e.sets.some((s) => !s.voltooid),
-    )
-    if (eerste !== -1) setActiefIndex(eerste)
-  }, [entries.length])
+    if (gesprongen.current || entries.length === 0) return
+    gesprongen.current = true
+    const eerste = entries.findIndex((e) => !e.overgeslagen && e.sets.some((s) => !s.voltooid))
+    if (eerste > 0) setActiefIndex(eerste)
+  }, [entries])
 
   if (oefeningen === undefined) {
     return (
@@ -175,19 +179,38 @@ function SetsTraining({ sessie }: { sessie: Session }) {
     navigeer(`/historie/${sessie.id}`, { replace: true })
   }
 
+  // Is deze oefening af, dan brengt dezelfde knop je naar de volgende — of naar
+  // het afronden van de training als dit de laatste was.
+  const volgendeOnaffeIndex = entries.findIndex(
+    (e, i) => i > actiefIndex && !e.overgeslagen && e.sets.some((s) => !s.voltooid),
+  )
+
+  const hoofdActie = (): void => {
+    if (volgendeOpenSet !== -1) {
+      void bevestigSet(volgendeOpenSet)
+      return
+    }
+    if (volgendeOnaffeIndex !== -1) {
+      setActiefIndex(volgendeOnaffeIndex)
+      return
+    }
+    setAfrondenOpen(true)
+  }
+
   const onderbalk = (
     <div className="flex items-center gap-2.5 pb-2">
       <Knop
         soort="primair"
         maat="groot"
         vol
-        disabled={volgendeOpenSet === -1}
-        icoon={<Vink />}
-        onClick={() => void bevestigSet(volgendeOpenSet)}
+        icoon={volgendeOpenSet === -1 ? undefined : <Vink />}
+        onClick={hoofdActie}
       >
-        {volgendeOpenSet === -1
-          ? 'Oefening klaar'
-          : `Set ${volgendeOpenSet + 1} klaar`}
+        {volgendeOpenSet !== -1
+          ? `Set ${volgendeOpenSet + 1} klaar`
+          : volgendeOnaffeIndex !== -1
+            ? `Verder met ${entries[volgendeOnaffeIndex]?.exerciseNaam ?? 'de volgende'}`
+            : 'Training afronden'}
       </Knop>
       <IcoonKnop
         label="Sessienotitie"

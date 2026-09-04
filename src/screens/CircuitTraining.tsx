@@ -37,7 +37,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
    */
   const [eindMs, setEindMs] = useState<number | null>(null)
   const [pauzeSec, setPauzeSec] = useState<number | null>(null)
-  const [, setTik] = useState(0)
+  const [nu, setNu] = useState(() => Date.now())
   const [notitieOpen, setNotitieOpen] = useState(false)
   const [notitieTekst, setNotitieTekst] = useState(sessie.sessieNotitie)
   const [afrondenOpen, setAfrondenOpen] = useState(false)
@@ -70,7 +70,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
   const klokLoopt = eindMs !== null
   const resterend =
     eindMs !== null
-      ? Math.max(0, Math.ceil((eindMs - Date.now()) / 1000))
+      ? Math.max(0, Math.ceil((eindMs - nu) / 1000))
       : (pauzeSec ?? doelSeconden)
   const isGestart = eindMs !== null || pauzeSec !== null
 
@@ -83,7 +83,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
 
   useEffect(() => {
     if (eindMs === null) return
-    const interval = window.setInterval(() => setTik((t) => t + 1), 250)
+    const interval = window.setInterval(() => setNu(Date.now()), 250)
     return () => window.clearInterval(interval)
   }, [eindMs])
 
@@ -166,6 +166,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
               } else {
                 afgegaan.current = false
                 setPauzeSec(null)
+                setNu(Date.now())
                 setEindMs(Date.now() + resterend * 1000)
               }
             }}
@@ -251,12 +252,12 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
             <div className="flex gap-1.5">
               {entries.map((entry, i) => {
                 const gereed = entry.sets[stap.ronde]?.voltooid === true
-                const nu = i === stap.entryIndex
+                const isHuidig = i === stap.entryIndex
                 return (
                   <div
                     key={entry.exerciseId}
                     className={`h-1 flex-1 rounded-full ${
-                      gereed ? 'bg-goed' : nu ? 'bg-accent' : 'bg-surface-2'
+                      gereed ? 'bg-goed' : isHuidig ? 'bg-accent' : 'bg-surface-2'
                     }`}
                   />
                 )
@@ -347,7 +348,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
                 {entries.map((entry, i) => {
                   const set = entry.sets[stap.ronde]
                   const gereed = set?.voltooid === true
-                  const nu = i === stap.entryIndex
+                  const isHuidig = i === stap.entryIndex
                   const o = oefeningen.get(entry.exerciseId)
                   return (
                     <button
@@ -355,7 +356,7 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
                       type="button"
                       onClick={() => setPositie(stap.ronde * entries.length + i)}
                       className={`flex min-h-[52px] w-full items-center justify-between gap-3 px-3.5 py-2.5 text-left ${
-                        nu ? 'bg-accent/8' : gereed ? 'opacity-55' : ''
+                        isHuidig ? 'bg-accent/8' : gereed ? 'opacity-55' : ''
                       }`}
                     >
                       <span className="flex min-w-0 items-center gap-2.5">
@@ -364,13 +365,13 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
                         ) : (
                           <span
                             className={`h-3.5 w-3.5 shrink-0 rounded-full border ${
-                              nu ? 'border-2 border-accent' : 'border-line-5'
+                              isHuidig ? 'border-2 border-accent' : 'border-line-5'
                             }`}
                           />
                         )}
                         <span className="t-body-sm truncate text-ink-2">{entry.exerciseNaam}</span>
                       </span>
-                      <span className={`t-caption shrink-0 ${nu ? 'text-accent' : 'text-ink-muted'}`}>
+                      <span className={`t-caption shrink-0 ${isHuidig ? 'text-accent' : 'text-ink-muted'}`}>
                         {o?.isTijdgebonden === true
                           ? `${set?.seconden ?? o.repMin} s`
                           : `${set?.reps ?? o?.repMin ?? 0} reps`}
