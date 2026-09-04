@@ -3,8 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 
 import { db } from '../db/db'
-import { rondSessieAf, wijzigEntry, wijzigSessieNotitie, wijzigSet } from '../db/repo'
+import {
+  haalSessie,
+  rondSessieAf,
+  wijzigEntry,
+  wijzigSessieNotitie,
+  wijzigSet,
+} from '../db/repo'
 import type { Session } from '../db/types'
+import { recordWaarde } from '../lib/pr'
 import { klok } from '../lib/date'
 import { meervoud } from '../lib/format'
 import { piep, tril } from '../lib/signalen'
@@ -123,6 +130,15 @@ export function CircuitTraining({ sessie, rondes }: { sessie: Session; rondes: n
       voltooidOp: new Date().toISOString(),
       ...(oefening.isTijdgebonden ? { seconden: behaald } : {}),
     })
+
+    // Ook hier records vieren: een langere hollow hold is net zo goed een PR.
+    const bijgewerkt = await haalSessie(sessie.id)
+    const nieuweSet = bijgewerkt?.entries.find((e) => e.exerciseId === stap.entry.exerciseId)?.sets[
+      stap.ronde
+    ]
+    if (nieuweSet?.isPR === true) {
+      toast.vierRecord(recordWaarde(oefening, nieuweSet))
+    }
 
     if (positie + 1 < stappen.length) {
       const volgende = stappen[positie + 1]

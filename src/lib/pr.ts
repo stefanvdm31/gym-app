@@ -1,4 +1,5 @@
 import type { Exercise, IsoDatum, PrSoort, SetLog } from '../db/types'
+import { kg } from './format'
 
 /**
  * Persoonlijke records.
@@ -154,6 +155,15 @@ export function besteRecords(exercise: Exercise, historie: SetMetContext[]): Bes
   }
 
   return uit
+}
+
+/**
+ * De waarde die je in de recordmelding ziet, bijvoorbeeld "60 kg × 8" of
+ * "45 s". Kort genoeg om op één regel in de pil te passen.
+ */
+export function recordWaarde(exercise: Exercise, set: SetLog): string {
+  if (exercise.isTijdgebonden) return `${set.seconden ?? 0} s`
+  return `${kg(set.gewichtKg, { toonPlus: exercise.isLichaamsgewicht })} × ${set.reps}`
 }
 
 export function prSoortLabel(soort: PrSoort): string {

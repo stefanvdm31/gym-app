@@ -18,7 +18,7 @@ import {
 } from '../db/repo'
 import type { Exercise, Session, SessionEntry, SetLog } from '../db/types'
 import { berekenAdvies, vorigeUitvoeringUitSets } from '../lib/progression'
-import { prSoortLabel } from '../lib/pr'
+import { recordWaarde } from '../lib/pr'
 import { klok } from '../lib/date'
 import { getal, kg, meervoud } from '../lib/format'
 import { useWakeLock } from '../lib/wakeLock'
@@ -167,8 +167,7 @@ function SetsTraining({ sessie }: { sessie: Session }) {
       .find((e) => e.exerciseId === actieveEntry.exerciseId)
       ?.sets[setIndex]
     if (nieuweSet?.isPR === true) {
-      const soorten = nieuweSet.prSoorten.map(prSoortLabel).join(' en ')
-      toast.toon(`Record op ${actieveOefening.naam}: ${soorten}`, 'pr')
+      toast.vierRecord(recordWaarde(actieveOefening, nieuweSet))
     }
   }
 
