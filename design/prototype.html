@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; padding: 0; background: #101010; }
+  body { font-family: Inter, -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+  * { box-sizing: border-box; }
+  a { color: #4c9ff0; text-decoration: none; }
+  a:hover { color: #7bb8f5; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; background: #101010; display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 36px 24px 64px;">
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 6px;">
+    <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87; text-transform: uppercase;">Klikbaar prototype · donker grafiet</div>
+    <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Krachttraining</div>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 640px;">
+    <button onClick="{{ goToday }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Vandaag</button>
+    <button onClick="{{ goActive }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Actieve training</button>
+    <button onClick="{{ goRest }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Rusttimer</button>
+    <button onClick="{{ goAbs }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Buikspierkwartier</button>
+    <button onClick="{{ goProgress }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Progressie</button>
+    <button onClick="{{ goBody }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Lichaam</button>
+    <button onClick="{{ goHistory }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Geschiedenis</button>
+    <button onClick="{{ goMore }}" style="border: 1px solid #323232; background: #1a1a1a; color: #cbc9c6; font-family: inherit; font-size: 13px; font-weight: 500; padding: 7px 13px; border-radius: 8px; cursor: pointer; white-space: nowrap;" style-hover="border-color: #4c9ff0; color: #f5f4f3;">Meer</button>
+  </div>
+
+  <div data-screen-label="Telefoon" style="width: 390px; height: 844px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 42px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 0.175px 1px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.45), 0 23px 52px rgba(0,0,0,0.4); flex: none;">
+
+    <div style="height: 46px; flex: none; display: flex; align-items: flex-end; justify-content: space-between; padding: 0 26px 6px; font-size: 13px; font-weight: 600; color: #f5f4f3;">
+      <div>9:41</div>
+      <div style="display: flex; align-items: center; gap: 5px;">
+        <div style="width: 16px; height: 9px; border: 1px solid #8e8b87; border-radius: 2px; padding: 1px;"><div style="width: 70%; height: 100%; background: #8e8b87; border-radius: 1px;"></div></div>
+      </div>
+    </div>
+
+    <div style="flex: 1; overflow-y: auto; overflow-x: hidden;">
+
+      <!-- ── VANDAAG ── -->
+      <sc-if value="{{ isToday }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Vandaag" style="padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 16px;">
+          <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">WOENSDAG 4 SEPTEMBER</div>
+              <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Push A</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; border: 1px solid #323232; border-radius: 9999px; padding: 5px 10px; font-size: 12px; font-weight: 600; color: #cbc9c6; white-space: nowrap;">Week 3 / 6</div>
+          </div>
+
+          <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; overflow: hidden;">
+            <div style="padding: 16px 16px 12px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="font-size: 15px; font-weight: 600; color: #f5f4f3;">Bovenlichaam duwen</div>
+                <div style="font-size: 14px; color: #8e8b87;">± 52 min · 14 sets</div>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 1px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #2e2e2e;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="font-size: 15px; color: #f5f4f3;">Bankdrukken</div>
+                    <div style="font-size: 14px; color: #8e8b87;">3 × 5 · vorige 80 kg × 5</div>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: #4c9ff0;">82,5 kg</div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #2e2e2e;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="font-size: 15px; color: #f5f4f3;">Incline dumbbell press</div>
+                    <div style="font-size: 14px; color: #8e8b87;">4 × 6–8 · vorige 30 kg × 8</div>
+                  </div>
+                  <div style="font-size: 14px; font-weight: 600; color: #4c9ff0;">32,5 kg</div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #2e2e2e;">
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <div style="font-size: 15px; color: #f5f4f3;">Dips</div>
+                    <div style="font-size: 14px; color: #8e8b87;">3 × 8–10 · lichaamsgewicht +10 kg</div>
+                  </div>
+                  <div style="font-size: 14px; font-weight: 600; color: #4c9ff0;">+10 kg</div>
+                </div>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid #2e2e2e;">
+                  <div style="font-size: 15px; color: #8e8b87;">+ 2 oefeningen</div>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div style="padding: 0 16px 16px;">
+              <button onClick="{{ goActive }}" style="width: 100%; min-height: 52px; background: #4c9ff0; color: #ffffff; border: none; border-radius: 9999px; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer;" style-hover="background: #5fa9f2;" style-active="background: #3b86d3; transform: scale(0.98);">Start training</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 12px;">
+            <button onClick="{{ goAbs }}" style="flex: 1; text-align: left; background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; font-family: inherit;" style-hover="border-color: #4a4a4a;">
+              <div style="font-size: 15px; font-weight: 600; color: #f5f4f3;">Buikspierkwartier</div>
+              <div style="font-size: 14px; color: #8e8b87;">15 min · circuit</div>
+            </button>
+            <div style="flex: 1; background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px;">
+              <div style="font-size: 15px; font-weight: 600; color: #f5f4f3;">Weeglog</div>
+              <div style="display: flex; align-items: baseline; gap: 6px;">
+                <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.125px; color: #f5f4f3;">84,2</div>
+                <div style="font-size: 14px; color: #8e8b87;">kg vandaag</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">LAATSTE TRAINING</div>
+            <button onClick="{{ goHistory }}" style="text-align: left; background: transparent; border: 1px solid #2e2e2e; border-radius: 12px; padding: 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px; cursor: pointer; font-family: inherit;" style-hover="border-color: #4a4a4a;">
+              <div style="display: flex; flex-direction: column; gap: 3px;">
+                <div style="font-size: 15px; color: #f5f4f3;">Pull A · maandag</div>
+                <div style="font-size: 14px; color: #8e8b87;">48 min · 12 sets · 1 PR</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg>
+            </button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── ACTIEVE TRAINING ── -->
+      <sc-if value="{{ isActive }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Actieve training" style="padding: 6px 20px 20px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <button onClick="{{ goToday }}" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#cbc9c6" stroke-width="1.7"><path d="M4 4l10 10M14 4L4 14"/></svg>
+            </button>
+            <div style="flex: 1; text-align: center; font-size: 15px; font-weight: 600; color: #f5f4f3;">Push A</div>
+            <div style="min-width: 56px; text-align: right; font-size: 15px; font-variant-numeric: tabular-nums; color: #8e8b87;">{{ elapsed }}</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; align-items: baseline; justify-content: space-between;">
+              <div style="font-size: 14px; color: #8e8b87;">{{ setsDoneLabel }}</div>
+              <div style="font-size: 14px; color: #8e8b87;">{{ volumeLabel }}</div>
+            </div>
+            <div style="height: 4px; background: #2c2c2c; border-radius: 9999px; overflow: hidden;">
+              <div style="{{ progressStyle }}"></div>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: #202020; border: 1px solid #2b2b2b; border-radius: 12px; opacity: 0.6;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <div style="width: 20px; height: 20px; border-radius: 9999px; background: rgba(69,198,94,0.16); display: flex; align-items: center; justify-content: center;">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#45c65e" stroke-width="2"><path d="M2.5 6.2l2.4 2.4L9.5 4"/></svg>
+              </div>
+              <div style="font-size: 15px; color: #cbc9c6;">Bankdrukken</div>
+            </div>
+            <div style="font-size: 14px; color: #8e8b87;">3 × 5 · 82,5 kg</div>
+          </div>
+
+          <div style="background: #242424; border: 1px solid #383838; border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.125px; color: #f5f4f3;">Incline dumbbell press</div>
+                <div style="font-size: 12px; font-weight: 600; color: #4c9ff0; white-space: nowrap;">2 / 5</div>
+              </div>
+              <div style="font-size: 14px; color: #8e8b87;">Doel 4 × 6–8 @ 32,5 kg · dubbele progressie</div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: rgba(240,138,60,0.1); border: 1px solid rgba(240,138,60,0.28); border-radius: 8px;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#f08a3c" stroke-width="1.7" style="flex: none;"><path d="M7 4.2v3.4M7 9.8h.01"/><circle cx="7" cy="7" r="5.4"/></svg>
+              <div style="font-size: 14px; color: #e6b389;">Haal je 4 × 8, dan volgende keer 35 kg</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: grid; grid-template-columns: 26px 1fr 1fr 44px; gap: 8px; align-items: center; padding: 0 2px;">
+                <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">SET</div>
+                <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">KG</div>
+                <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">REPS</div>
+                <div></div>
+              </div>
+
+              <sc-for list="{{ sets }}" as="set" hint-placeholder-count="4">
+                <div style="display: grid; grid-template-columns: 26px 1fr 1fr 44px; gap: 8px; align-items: center;">
+                  <div style="font-size: 15px; font-variant-numeric: tabular-nums; color: #8e8b87;">{{ set.n }}</div>
+
+                  <div style="display: flex; align-items: center; gap: 6px; background: #2c2c2c; border: 1px solid #383838; border-radius: 4px; height: 44px; padding: 0 4px;">
+                    <button onClick="{{ set.kgDown }}" style="width: 30px; height: 36px; flex: none; background: transparent; border: none; color: #8e8b87; font-family: inherit; font-size: 18px; cursor: pointer;" style-hover="color: #f5f4f3;">−</button>
+                    <div style="flex: 1; text-align: center; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; color: #f5f4f3; white-space: nowrap;">{{ set.kg }}</div>
+                    <button onClick="{{ set.kgUp }}" style="width: 30px; height: 36px; flex: none; background: transparent; border: none; color: #8e8b87; font-family: inherit; font-size: 18px; cursor: pointer;" style-hover="color: #f5f4f3;">+</button>
+                  </div>
+
+                  <div style="display: flex; align-items: center; gap: 6px; background: #2c2c2c; border: 1px solid #383838; border-radius: 4px; height: 44px; padding: 0 4px;">
+                    <button onClick="{{ set.repDown }}" style="width: 30px; height: 36px; flex: none; background: transparent; border: none; color: #8e8b87; font-family: inherit; font-size: 18px; cursor: pointer;" style-hover="color: #f5f4f3;">−</button>
+                    <div style="flex: 1; text-align: center; font-size: 15px; font-weight: 500; font-variant-numeric: tabular-nums; color: #f5f4f3;">{{ set.reps }}</div>
+                    <button onClick="{{ set.repUp }}" style="width: 30px; height: 36px; flex: none; background: transparent; border: none; color: #8e8b87; font-family: inherit; font-size: 18px; cursor: pointer;" style-hover="color: #f5f4f3;">+</button>
+                  </div>
+
+                  <button onClick="{{ set.toggle }}" style="{{ set.boxStyle }}">
+                    <sc-if value="{{ set.done }}" hint-placeholder-val="{{ false }}">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#ffffff" stroke-width="2.1"><path d="M3.2 8.4l3.2 3.2L12.8 5"/></svg>
+                    </sc-if>
+                  </button>
+
+                  <div></div>
+                  <div style="grid-column: 2 / 5; display: flex; align-items: center; gap: 8px; margin-top: -2px;">
+                    <div style="font-size: 14px; color: #8e8b87;">{{ set.prev }}</div>
+                    <sc-if value="{{ set.pr }}" hint-placeholder-val="{{ false }}">
+                      <div style="display: flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; background: rgba(69,198,94,0.14); border: 1px solid rgba(69,198,94,0.3);">
+                        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="#45c65e" stroke-width="1.8"><path d="M1.5 8.5V5M5 8.5V2M8.5 8.5V6"/></svg>
+                        <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #45c65e;">PR</div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+
+            <button onClick="{{ addSet }}" style="align-self: flex-start; background: transparent; border: none; padding: 6px 0; font-family: inherit; font-size: 14px; font-weight: 500; color: #4c9ff0; cursor: pointer;" style-hover="color: #7bb8f5;">+ Set toevoegen</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: transparent; border: 1px solid #2b2b2b; border-radius: 12px;">
+              <div style="font-size: 15px; color: #cbc9c6;">Dips</div>
+              <div style="font-size: 14px; color: #8e8b87;">3 × 8–10 · +10 kg</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: transparent; border: 1px solid #2b2b2b; border-radius: 12px;">
+              <div style="font-size: 15px; color: #cbc9c6;">Lateral raise</div>
+              <div style="font-size: 14px; color: #8e8b87;">3 × 12–15 · 10 kg</div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: transparent; border: 1px solid #2b2b2b; border-radius: 12px;">
+              <div style="font-size: 15px; color: #cbc9c6;">Triceps pushdown</div>
+              <div style="font-size: 14px; color: #8e8b87;">3 × 10–12 · 32 kg</div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── BUIKSPIERKWARTIER ── -->
+      <sc-if value="{{ isAbs }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Buikspierkwartier" style="padding: 6px 20px 20px; display: flex; flex-direction: column; gap: 20px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+            <button onClick="{{ goToday }}" style="width: 44px; height: 44px; margin-left: -12px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer;">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#cbc9c6" stroke-width="1.7"><path d="M11 4L6 9l5 5"/></svg>
+            </button>
+            <div style="flex: 1; text-align: center; font-size: 15px; font-weight: 600; color: #f5f4f3;">Buikspierkwartier</div>
+            <div style="min-width: 44px; text-align: right; font-size: 14px; color: #8e8b87;">2 / 3</div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px 0 4px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">RONDE 2 · OEFENING 3 VAN 5</div>
+            <div style="font-size: 64px; font-weight: 700; letter-spacing: -2.125px; line-height: 1; font-variant-numeric: tabular-nums; color: #f5f4f3;">{{ absClock }}</div>
+            <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.125px; color: #f5f4f3;">Hollow hold</div>
+            <div style="font-size: 15px; color: #8e8b87;">Onderrug tegen de mat, kin naar de borst</div>
+          </div>
+
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1; height: 4px; border-radius: 9999px; background: #45c65e;"></div>
+            <div style="flex: 1; height: 4px; border-radius: 9999px; background: #45c65e;"></div>
+            <div style="flex: 1; height: 4px; border-radius: 9999px; background: #4c9ff0;"></div>
+            <div style="flex: 1; height: 4px; border-radius: 9999px; background: #2c2c2c;"></div>
+            <div style="flex: 1; height: 4px; border-radius: 9999px; background: #2c2c2c;"></div>
+          </div>
+
+          <div style="display: flex; gap: 10px;">
+            <button onClick="{{ toggleAbs }}" style="flex: 1; min-height: 52px; background: #4c9ff0; border: none; border-radius: 9999px; color: #ffffff; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer;" style-hover="background: #5fa9f2;" style-active="background: #3b86d3;">{{ absButton }}</button>
+            <button onClick="{{ absSkip }}" style="width: 96px; min-height: 52px; background: #242424; border: 1px solid #383838; border-radius: 9999px; color: #f5f4f3; font-family: inherit; font-size: 16px; font-weight: 500; cursor: pointer;" style-hover="border-color: #4a4a4a;">Volgende</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">CIRCUIT</div>
+            <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; opacity: 0.55;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#45c65e" stroke-width="2"><path d="M3 7.4l2.8 2.8L11 5"/></svg>
+                  <div style="font-size: 15px; color: #cbc9c6;">Dead bug</div>
+                </div>
+                <div style="font-size: 14px; color: #8e8b87;">45 s</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-top: 1px solid #2e2e2e; opacity: 0.55;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#45c65e" stroke-width="2"><path d="M3 7.4l2.8 2.8L11 5"/></svg>
+                  <div style="font-size: 15px; color: #cbc9c6;">Side plank</div>
+                </div>
+                <div style="font-size: 14px; color: #8e8b87;">2 × 30 s</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-top: 1px solid #2e2e2e; background: rgba(76,159,240,0.08);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 14px; height: 14px; border-radius: 9999px; border: 2px solid #4c9ff0;"></div>
+                  <div style="font-size: 15px; font-weight: 500; color: #f5f4f3;">Hollow hold</div>
+                </div>
+                <div style="font-size: 14px; color: #4c9ff0;">40 s</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 14px; height: 14px; border-radius: 9999px; border: 1px solid #4a4a4a;"></div>
+                  <div style="font-size: 15px; color: #cbc9c6;">Pallof press</div>
+                </div>
+                <div style="font-size: 14px; color: #8e8b87;">2 × 12</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <div style="width: 14px; height: 14px; border-radius: 9999px; border: 1px solid #4a4a4a;"></div>
+                  <div style="font-size: 15px; color: #cbc9c6;">Cable crunch</div>
+                </div>
+                <div style="font-size: 14px; color: #8e8b87;">15 reps</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── PROGRESSIE ── -->
+      <sc-if value="{{ isProgress }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Progressie" style="padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Progressie</div>
+
+          <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px;">
+            <div style="flex: none; padding: 7px 13px; border-radius: 9999px; background: #4c9ff0; color: #ffffff; font-size: 13px; font-weight: 500;">Bankdrukken</div>
+            <div style="flex: none; padding: 7px 13px; border-radius: 9999px; background: #242424; border: 1px solid #323232; color: #cbc9c6; font-size: 13px; font-weight: 500;">Squat</div>
+            <div style="flex: none; padding: 7px 13px; border-radius: 9999px; background: #242424; border: 1px solid #323232; color: #cbc9c6; font-size: 13px; font-weight: 500;">Deadlift</div>
+            <div style="flex: none; padding: 7px 13px; border-radius: 9999px; background: #242424; border: 1px solid #323232; color: #cbc9c6; font-size: 13px; font-weight: 500;">Pull-up</div>
+          </div>
+
+          <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 16px 14px 12px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">GESCHAT 1RM</div>
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <div style="font-size: 40px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; color: #f5f4f3;">96,5</div>
+                  <div style="font-size: 15px; color: #8e8b87;">kg</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 5px; padding: 4px 9px; border-radius: 9999px; background: rgba(69,198,94,0.14); border: 1px solid rgba(69,198,94,0.3);">
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="#45c65e" stroke-width="1.8"><path d="M2 7.5L5.5 4l3.5 3.5"/></svg>
+                <div style="font-size: 12px; font-weight: 600; color: #45c65e; white-space: nowrap;">+4,2 kg</div>
+              </div>
+            </div>
+
+            <div style="position: relative;">
+              <svg width="100%" height="132" viewBox="0 0 320 132" preserveAspectRatio="none" style="display: block;">
+                <line x1="0" y1="18" x2="320" y2="18" stroke="#2e2e2e" stroke-width="1"/>
+                <line x1="0" y1="62" x2="320" y2="62" stroke="#2e2e2e" stroke-width="1"/>
+                <line x1="0" y1="106" x2="320" y2="106" stroke="#2e2e2e" stroke-width="1"/>
+                <path d="M6 96 L50 90 L94 92 L138 74 L182 66 L226 68 L270 44 L314 30 L314 120 L6 120 Z" fill="rgba(76,159,240,0.12)"/>
+                <path d="M6 96 L50 90 L94 92 L138 74 L182 66 L226 68 L270 44 L314 30" fill="none" stroke="#4c9ff0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+                <circle cx="314" cy="30" r="3.5" fill="#4c9ff0"/>
+              </svg>
+              <div style="display: flex; justify-content: space-between; font-size: 12px; color: #8e8b87; padding-top: 4px;">
+                <div>jul</div><div>aug</div><div>sep</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <div style="font-size: 15px; font-weight: 600; color: #f5f4f3;">Dubbele progressie</div>
+              <div style="font-size: 14px; color: #8e8b87;">3 × 5 @ 82,5 kg</div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                <div style="height: 4px; border-radius: 9999px; background: #45c65e;"></div>
+                <div style="font-size: 14px; color: #cbc9c6;">Set 1 · 5</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                <div style="height: 4px; border-radius: 9999px; background: #45c65e;"></div>
+                <div style="font-size: 14px; color: #cbc9c6;">Set 2 · 5</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 6px;">
+                <div style="height: 4px; border-radius: 9999px; background: #f08a3c;"></div>
+                <div style="font-size: 14px; color: #cbc9c6;">Set 3 · 4</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #2c2c2c; border-radius: 8px;">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8e8b87" stroke-width="1.7" style="flex: none;"><circle cx="7" cy="7" r="5.4"/><path d="M7 4.4v3.2l2 1.2"/></svg>
+              <div style="font-size: 14px; color: #cbc9c6;">Nog 1 rep in set 3, dan naar 85 kg</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">WEEKVOLUME</div>
+            <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 16px 14px; display: flex; align-items: flex-end; gap: 8px; height: 128px;">
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 46%; background: #3a3a3a; border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #8e8b87;">w30</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 58%; background: #3a3a3a; border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #8e8b87;">w31</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 70%; background: #3a3a3a; border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #8e8b87;">w32</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 34%; background: rgba(240,138,60,0.5); border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #f08a3c;">deload</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 76%; background: #3a3a3a; border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #8e8b87;">w34</div>
+              </div>
+              <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end;">
+                <div style="width: 100%; height: 88%; background: #4c9ff0; border-radius: 4px 4px 0 0;"></div>
+                <div style="font-size: 12px; color: #cbc9c6;">nu</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">RECENTE RECORDS</div>
+            <div style="background: transparent; border: 1px solid #2e2e2e; border-radius: 12px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px;">
+                <div style="font-size: 15px; color: #f5f4f3;">Incline dumbbell press</div>
+                <div style="font-size: 14px; color: #8e8b87;">32,5 kg × 8 · vandaag</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="font-size: 15px; color: #f5f4f3;">Pull-up</div>
+                <div style="font-size: 14px; color: #8e8b87;">+15 kg × 6 · ma</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="font-size: 15px; color: #f5f4f3;">Squat</div>
+                <div style="font-size: 14px; color: #8e8b87;">120 kg × 5 · vr</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── LICHAAM ── -->
+      <sc-if value="{{ isBody }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Lichaam" style="padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Lichaam</div>
+
+          <div style="background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 16px 14px; display: flex; flex-direction: column; gap: 14px;">
+            <div style="display: flex; align-items: flex-end; justify-content: space-between;">
+              <div style="display: flex; flex-direction: column; gap: 2px;">
+                <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">LICHAAMSGEWICHT</div>
+                <div style="display: flex; align-items: baseline; gap: 8px;">
+                  <div style="font-size: 40px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; color: #f5f4f3;">84,2</div>
+                  <div style="font-size: 15px; color: #8e8b87;">kg</div>
+                </div>
+              </div>
+              <div style="font-size: 14px; color: #8e8b87;">7-daags gem. 84,5</div>
+            </div>
+            <svg width="100%" height="96" viewBox="0 0 320 96" preserveAspectRatio="none" style="display: block;">
+              <path d="M6 30 L44 38 L82 26 L120 44 L158 40 L196 54 L234 48 L272 60 L314 56" fill="none" stroke="#3f3f3f" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M6 34 L82 36 L158 44 L234 52 L314 58" fill="none" stroke="#4c9ff0" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            </svg>
+            <button style="min-height: 44px; background: #2c2c2c; border: 1px solid #383838; border-radius: 9999px; color: #f5f4f3; font-family: inherit; font-size: 15px; font-weight: 500; cursor: pointer;" style-hover="border-color: #4a4a4a;">Weging toevoegen</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">OMTREKMATEN · 1 SEP</div>
+            <div style="border: 1px solid #2e2e2e; border-radius: 12px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px;">
+                <div style="font-size: 15px; color: #f5f4f3;">Borst</div>
+                <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 15px; color: #cbc9c6;">104,0 cm</div><div style="font-size: 14px; color: #45c65e;">+0,5</div></div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="font-size: 15px; color: #f5f4f3;">Taille</div>
+                <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 15px; color: #cbc9c6;">86,5 cm</div><div style="font-size: 14px; color: #45c65e;">−1,0</div></div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="font-size: 15px; color: #f5f4f3;">Bovenarm</div>
+                <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 15px; color: #cbc9c6;">37,0 cm</div><div style="font-size: 14px; color: #8e8b87;">0,0</div></div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 13px 14px; border-top: 1px solid #2e2e2e;">
+                <div style="font-size: 15px; color: #f5f4f3;">Bovenbeen</div>
+                <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 15px; color: #cbc9c6;">60,5 cm</div><div style="font-size: 14px; color: #45c65e;">+0,5</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── GESCHIEDENIS ── -->
+      <sc-if value="{{ isHistory }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Geschiedenis" style="padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Geschiedenis</div>
+
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1; background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.125px; color: #f5f4f3;">14</div>
+              <div style="font-size: 14px; color: #8e8b87;">trainingen · sep</div>
+            </div>
+            <div style="flex: 1; background: #242424; border: 1px solid #323232; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 3px;">
+              <div style="font-size: 20px; font-weight: 600; letter-spacing: -0.125px; color: #f5f4f3;">4,1</div>
+              <div style="font-size: 14px; color: #8e8b87;">per week gem.</div>
+            </div>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">DEZE WEEK</div>
+            <div style="border: 1px solid #2e2e2e; border-radius: 12px; overflow: hidden;">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 3px;">
+                  <div style="font-size: 15px; color: #f5f4f3;">Pull A</div>
+                  <div style="font-size: 14px; color: #8e8b87;">ma 2 sep · 48 min · 12 sets</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; background: rgba(69,198,94,0.14); border: 1px solid rgba(69,198,94,0.3); font-size: 12px; font-weight: 600; color: #45c65e;">1 PR</div>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; border-top: 1px solid #2e2e2e;">
+                <div style="display: flex; flex-direction: column; gap: 3px;">
+                  <div style="font-size: 15px; color: #f5f4f3;">Buikspierkwartier</div>
+                  <div style="font-size: 14px; color: #8e8b87;">zo 1 sep · 15 min · 3 rondes</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; border-top: 1px solid #2e2e2e;">
+                <div style="display: flex; flex-direction: column; gap: 3px;">
+                  <div style="font-size: 15px; color: #f5f4f3;">Legs A</div>
+                  <div style="font-size: 14px; color: #8e8b87;">za 31 aug · 61 min · 15 sets</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg>
+              </div>
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px; border-top: 1px solid #2e2e2e;">
+                <div style="display: flex; flex-direction: column; gap: 3px;">
+                  <div style="font-size: 15px; color: #f5f4f3;">Push A · deload</div>
+                  <div style="font-size: 14px; color: #8e8b87;">do 29 aug · 38 min · 11 sets</div>
+                </div>
+                <div style="padding: 2px 8px; border-radius: 9999px; background: rgba(240,138,60,0.12); border: 1px solid rgba(240,138,60,0.3); font-size: 12px; font-weight: 600; color: #f08a3c;">deload</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ── MEER ── -->
+      <sc-if value="{{ isMore }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Meer" style="padding: 10px 20px 24px; display: flex; flex-direction: column; gap: 18px;">
+          <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; color: #f5f4f3;">Meer</div>
+          <div style="border: 1px solid #2e2e2e; border-radius: 12px; overflow: hidden;">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 14px;">
+              <div style="font-size: 15px; color: #f5f4f3;">Schema's</div>
+              <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 14px; color: #8e8b87;">Push / Pull / Legs</div><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 14px; border-top: 1px solid #2e2e2e;">
+              <div style="font-size: 15px; color: #f5f4f3;">Oefeningen</div>
+              <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 14px; color: #8e8b87;">62</div><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 14px; border-top: 1px solid #2e2e2e;">
+              <div style="font-size: 15px; color: #f5f4f3;">Rusttijden</div>
+              <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 14px; color: #8e8b87;">2:00 standaard</div><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 14px; border-top: 1px solid #2e2e2e;">
+              <div style="font-size: 15px; color: #f5f4f3;">Eenheden</div>
+              <div style="display: flex; align-items: center; gap: 10px;"><div style="font-size: 14px; color: #8e8b87;">kg · cm</div><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg></div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 14px; border-top: 1px solid #2e2e2e;">
+              <div style="font-size: 15px; color: #f5f4f3;">Back-up &amp; export</div>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#63605d" stroke-width="1.6"><path d="M6 4l4 4-4 4"/></svg>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+
+    <!-- rusttimer in context -->
+    <sc-if value="{{ restVisible }}" hint-placeholder-val="{{ false }}">
+      <div style="flex: none; margin: 0 12px 8px; background: #2c2c2c; border: 1px solid #3d3d3d; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.4);">
+        <div style="height: 3px; background: #3a3a3a;">
+          <div style="{{ restStyle }}"></div>
+        </div>
+        <div style="padding: 12px 14px 12px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="display: flex; align-items: baseline; gap: 8px; flex: none;">
+              <div style="font-size: 12px; font-weight: 600; letter-spacing: 0.125px; color: #8e8b87;">RUST</div>
+              <div style="font-size: 26px; font-weight: 700; letter-spacing: -0.625px; line-height: 1.1; font-variant-numeric: tabular-nums; color: #f5f4f3; white-space: nowrap;">{{ restClock }}</div>
+            </div>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; align-items: flex-end;">
+              <div style="font-size: 14px; color: #cbc9c6; white-space: nowrap;">{{ nextSetLabel }}</div>
+              <div style="font-size: 14px; color: #8e8b87; white-space: nowrap;">{{ nextTargetLabel }}</div>
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button onClick="{{ restMinus }}" style="flex: 1; min-height: 44px; border-radius: 8px; background: #383838; border: none; color: #f5f4f3; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;" style-hover="background: #444;">−15 s</button>
+            <button onClick="{{ restPlus }}" style="flex: 1; min-height: 44px; border-radius: 8px; background: #383838; border: none; color: #f5f4f3; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;" style-hover="background: #444;">+15 s</button>
+            <button onClick="{{ restSkip }}" style="flex: 1; min-height: 44px; border-radius: 8px; background: transparent; border: 1px solid #4a4a4a; color: #cbc9c6; font-family: inherit; font-size: 15px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;" style-hover="border-color: #6a6a6a;">
+              <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3l5 4-5 4M10.5 3v8"/></svg>
+              Sla over
+            </button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- onderbalk: hoofdactie tijdens training, anders navigatie -->
+    <sc-if value="{{ isActive }}" hint-placeholder-val="{{ false }}">
+      <div style="flex: none; padding: 8px 16px 26px; background: #1a1a1a; border-top: 1px solid #2a2a2a; display: flex; gap: 10px; align-items: center;">
+        <button onClick="{{ completeSet }}" style="flex: 1; min-height: 56px; background: #4c9ff0; border: none; border-radius: 9999px; color: #ffffff; font-family: inherit; font-size: 16px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" style-hover="background: #5fa9f2;" style-active="background: #3b86d3; transform: scale(0.99);">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#ffffff" stroke-width="2.1"><path d="M3.2 8.4l3.2 3.2L12.8 5"/></svg>
+          {{ mainActionLabel }}
+        </button>
+        <button onClick="{{ goToday }}" style="width: 56px; height: 56px; border-radius: 9999px; background: #242424; border: 1px solid #383838; color: #cbc9c6; display: flex; align-items: center; justify-content: center; cursor: pointer;" style-hover="border-color: #4a4a4a;">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3h10v10H3z"/></svg>
+        </button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ showNav }}" hint-placeholder-val="{{ true }}">
+      <div style="flex: none; height: 82px; padding: 8px 6px 22px; background: #1a1a1a; border-top: 1px solid #2a2a2a; display: flex;">
+        <button onClick="{{ goToday }}" style="{{ navToday }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.6" style="stroke: currentColor;"><rect x="3" y="4.5" width="14" height="12" rx="2.5"/><path d="M3 8.5h14M7 3v3M13 3v3"/></svg>
+          <div style="font-size: 11px; font-weight: 500;">Vandaag</div>
+        </button>
+        <button onClick="{{ goProgress }}" style="{{ navProgress }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.6" stroke-linejoin="round" style="stroke: currentColor;"><path d="M3 14l4-4 3.5 3L17 5"/><path d="M17 5h-4M17 5v4"/></svg>
+          <div style="font-size: 11px; font-weight: 500;">Progressie</div>
+        </button>
+        <button onClick="{{ goBody }}" style="{{ navBody }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.6" style="stroke: currentColor;"><circle cx="10" cy="10" r="7"/><path d="M10 10V5.5"/></svg>
+          <div style="font-size: 11px; font-weight: 500;">Lichaam</div>
+        </button>
+        <button onClick="{{ goHistory }}" style="{{ navHistory }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.6" style="stroke: currentColor;"><path d="M3.5 6.5h13M3.5 10h13M3.5 13.5h9"/></svg>
+          <div style="font-size: 11px; font-weight: 500;">Historie</div>
+        </button>
+        <button onClick="{{ goMore }}" style="{{ navMore }}">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke-width="1.9" stroke-linecap="round" style="stroke: currentColor;"><path d="M5 10h.01M10 10h.01M15 10h.01"/></svg>
+          <div style="font-size: 11px; font-weight: 500;">Meer</div>
+        </button>
+      </div>
+    </sc-if>
+
+  </div>
+
+  <div style="max-width: 390px; display: flex; flex-direction: column; gap: 6px; text-align: center;">
+    <div style="font-size: 14px; color: #8e8b87; text-wrap: pretty;">Tik op de vinkvlakken of op <span style="color: #8e8b87;">Set klaar</span> — de rusttimer start dan in beeld, boven de duimzone.</div>
+  </div>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accentColor&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#4c9ff0&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#4c9ff0&quot;, &quot;#62aef0&quot;, &quot;#45c65e&quot;, &quot;#f08a3c&quot;], &quot;section&quot;: &quot;Thema&quot; },
+  &quot;restSeconds&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 120, &quot;min&quot;: 45, &quot;max&quot;: 240, &quot;step&quot;: 15, &quot;unit&quot;: &quot;s&quot;, &quot;tsType&quot;: &quot;number&quot;, &quot;section&quot;: &quot;Training&quot; },
+  &quot;showPrBadges&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Training&quot; }
+}">
+class Component extends DCLogic {
+  state = {
+    screen: 'today',
+    elapsedSec: 1452,
+    restLeft: 0,
+    restTotal: 120,
+    absLeft: 40,
+    absRunning: true,
+    sets: [
+      { n: 1, kg: 32.5, reps: 8, done: true, prev: 'vorige 30 kg × 8', pr: true },
+      { n: 2, kg: 32.5, reps: 8, done: true, prev: 'vorige 30 kg × 8', pr: false },
+      { n: 3, kg: 32.5, reps: 7, done: false, prev: 'vorige 30 kg × 7', pr: false },
+      { n: 4, kg: 32.5, reps: 6, done: false, prev: 'vorige 30 kg × 6', pr: false }
+    ]
+  };
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState(s => {
+        const next = {};
+        if (s.screen === 'active') next.elapsedSec = s.elapsedSec + 1;
+        if (s.restLeft > 0) next.restLeft = s.restLeft - 1;
+        if (s.screen === 'abs' && s.absRunning && s.absLeft > 0) next.absLeft = s.absLeft - 1;
+        return next;
+      });
+    }, 1000);
+  }
+
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  clock(total) {
+    const m = Math.floor(total / 60);
+    const s = total % 60;
+    return m + ':' + String(s).padStart(2, '0');
+  }
+
+  fmtKg(v) {
+    return (Math.round(v * 10) / 10).toString().replace('.', ',') + ' kg';
+  }
+
+  go(screen) {
+    this.setState({ screen, restLeft: 0 });
+  }
+
+  patchSet(i, patch) {
+    this.setState(s => ({ sets: s.sets.map((set, idx) => idx === i ? Object.assign({}, set, patch) : set) }));
+  }
+
+  startRest() {
+    this.setState(s => ({ restLeft: s.restTotal }));
+  }
+
+  renderVals() {
+    const s = this.state;
+    const accent = this.props.accentColor || '#4c9ff0';
+    const restTotal = this.props.restSeconds || 120;
+    const showPr = this.props.showPrBadges !== false;
+    const navStyle = (on) => ({
+      flex: 1, background: 'transparent', border: 'none', display: 'flex',
+      flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      gap: '4px', cursor: 'pointer', fontFamily: 'inherit', minHeight: '48px',
+      color: on ? accent : '#63605d'
+    });
+
+    const sets = s.sets.map((set, i) => ({
+      n: set.n,
+      kg: (Math.round(set.kg * 10) / 10).toString().replace('.', ','),
+      reps: set.reps,
+      done: set.done,
+      prev: set.prev,
+      pr: showPr && set.pr,
+      boxStyle: Object.assign({
+        width: '44px', height: '44px', borderRadius: '8px', display: 'flex',
+        alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontFamily: 'inherit'
+      }, set.done
+        ? { background: accent, border: '1px solid ' + accent }
+        : { background: '#2c2c2c', border: '1px solid #454545' }),
+      toggle: () => {
+        this.patchSet(i, { done: !set.done });
+        if (!set.done) this.startRest();
+      },
+      kgUp: () => this.patchSet(i, { kg: set.kg + 2.5 }),
+      kgDown: () => this.patchSet(i, { kg: Math.max(0, set.kg - 2.5) }),
+      repUp: () => this.patchSet(i, { reps: set.reps + 1 }),
+      repDown: () => this.patchSet(i, { reps: Math.max(0, set.reps - 1) })
+    }));
+
+    const doneCount = s.sets.filter(x => x.done).length;
+    const firstOpen = s.sets.findIndex(x => !x.done);
+    const openSet = firstOpen === -1 ? null : s.sets[firstOpen];
+
+    return {
+      isToday: s.screen === 'today',
+      isActive: s.screen === 'active',
+      isAbs: s.screen === 'abs',
+      isProgress: s.screen === 'progress',
+      isBody: s.screen === 'body',
+      isHistory: s.screen === 'history',
+      isMore: s.screen === 'more',
+      showNav: s.screen !== 'active' && s.screen !== 'abs',
+
+      navToday: navStyle(s.screen === 'today'),
+      navProgress: navStyle(s.screen === 'progress'),
+      navBody: navStyle(s.screen === 'body'),
+      navHistory: navStyle(s.screen === 'history'),
+      navMore: navStyle(s.screen === 'more'),
+
+      elapsed: this.clock(s.elapsedSec),
+      sets,
+      setsDoneLabel: (doneCount + 3) + ' van 14 sets',
+      volumeLabel: '2.140 kg volume',
+      progressStyle: { height: '100%', background: accent, borderRadius: '9999px', width: Math.round(((doneCount + 3) / 14) * 100) + '%' },
+
+      restVisible: s.restLeft > 0,
+      restClock: this.clock(s.restLeft),
+      restStyle: { height: '100%', background: accent, width: Math.round((s.restLeft / restTotal) * 100) + '%' },
+      nextSetLabel: openSet ? 'Set ' + openSet.n + ' van 4' : 'Oefening klaar',
+      nextTargetLabel: openSet ? this.fmtKg(openSet.kg) + ' × ' + openSet.reps : 'Volgende: Dips',
+
+      mainActionLabel: openSet ? 'Set ' + openSet.n + ' klaar' : 'Oefening afronden',
+      completeSet: () => {
+        if (firstOpen === -1) return;
+        this.patchSet(firstOpen, { done: true });
+        this.startRest();
+      },
+      addSet: () => this.setState(st => ({
+        sets: st.sets.concat([{ n: st.sets.length + 1, kg: st.sets[st.sets.length - 1].kg, reps: st.sets[st.sets.length - 1].reps, done: false, prev: 'extra set', pr: false }])
+      })),
+
+      absClock: this.clock(s.absLeft),
+      absButton: s.absRunning ? 'Pauzeer' : 'Hervat',
+      toggleAbs: () => this.setState(st => ({ absRunning: !st.absRunning })),
+      absSkip: () => this.setState({ absLeft: 30, absRunning: true }),
+
+      restMinus: () => this.setState(st => ({ restLeft: Math.max(0, st.restLeft - 15) })),
+      restPlus: () => this.setState(st => ({ restLeft: st.restLeft + 15 })),
+      restSkip: () => this.setState({ restLeft: 0 }),
+
+      goToday: () => this.go('today'),
+      goActive: () => this.go('active'),
+      goRest: () => this.setState({ screen: 'active', restLeft: restTotal }),
+      goAbs: () => this.go('abs'),
+      goProgress: () => this.go('progress'),
+      goBody: () => this.go('body'),
+      goHistory: () => this.go('history'),
+      goMore: () => this.go('more')
+    };
+  }
+}
+
+</script>
+</body>
+</html>

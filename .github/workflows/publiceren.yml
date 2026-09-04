@@ -1,0 +1,52 @@
+# Zet de app online op GitHub Pages.
+#
+# Dit draait automatisch bij elke push naar main. Je hoeft eenmalig in je
+# repository naar Settings > Pages te gaan en bij "Source" te kiezen voor
+# "GitHub Actions". Daarna gaat het vanzelf.
+name: Publiceren
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  bouwen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Bouwen
+        # Het pad wordt afgeleid van de naam van je repository, dus dit werkt
+        # ongeacht hoe je hem noemt.
+        run: npm run build
+        env:
+          BASE_PATH: /${{ github.event.repository.name }}/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publiceren:
+    needs: bouwen
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.publiceer.outputs.page_url }}
+    steps:
+      - id: publiceer
+        uses: actions/deploy-pages@v4

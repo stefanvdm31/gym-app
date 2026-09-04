@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+
+/*
+ * Designtokens uit het ontwerp "donker grafiet".
+ * Wil je de app een andere tint geven, dan verander je alleen hier iets.
+ */
+@theme {
+  --color-canvas: #101010;
+  --color-shell: #1a1a1a;
+  --color-surface: #242424;
+  --color-surface-2: #2c2c2c;
+  --color-surface-dim: #202020;
+  --color-surface-3: #383838;
+
+  --color-line: #2a2a2a;
+  --color-line-2: #2e2e2e;
+  --color-line-3: #323232;
+  --color-line-4: #454545;
+  --color-line-5: #4a4a4a;
+
+  --color-ink: #f5f4f3;
+  --color-ink-2: #cbc9c6;
+  --color-ink-muted: #8e8b87;
+  --color-ink-faint: #63605d;
+
+  --color-accent: #4c9ff0;
+  --color-accent-hover: #5fa9f2;
+  --color-accent-press: #3b86d3;
+  --color-accent-soft: #7bb8f5;
+
+  --color-goed: #45c65e;
+  --color-let-op: #f08a3c;
+  --color-let-op-tekst: #e6b389;
+  --color-fout: #f0645b;
+
+  --font-sans: Inter, -apple-system, system-ui, 'Segoe UI', Helvetica, Arial, sans-serif;
+
+  --radius-xs: 4px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior-y: none;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Geen dubbeltik-zoom en geen blauwe tikflits in de sportschool. */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    font-family: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  /* Getallen blijven op hun plek staan tijdens het aftellen. */
+  .cijfers {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Type-schaal uit het ontwerp. */
+  .t-display {
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -2.125px;
+  }
+  .t-h1 {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .t-h2 {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.23;
+    letter-spacing: -0.625px;
+  }
+  .t-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.125px;
+  }
+  .t-body {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .t-body-sm {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.33;
+  }
+  .t-caption {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.43;
+  }
+  .t-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.33;
+    letter-spacing: 0.125px;
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+    -moz-appearance: textfield;
+  }
+  input[type='number']::-webkit-outer-spin-button,
+  input[type='number']::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  /* Zichtbare focus voor toetsenbordgebruik op de laptop. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@layer utilities {
+  /* De S26 Ultra heeft afgeronde hoeken en een gebarenbalk onderin. */
+  .veilig-onder {
+    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+  }
+  .veilig-boven {
+    padding-top: max(env(safe-area-inset-top), 8px);
+  }
+  .veilig-zijkant {
+    padding-left: max(env(safe-area-inset-left), 0px);
+    padding-right: max(env(safe-area-inset-right), 0px);
+  }
+}
