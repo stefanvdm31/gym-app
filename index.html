@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#101010" />
     <meta name="description" content="Persoonlijk krachttrainingslogboek. Werkt volledig offline." />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Kracht" />
     <link rel="icon" type="image/svg+xml" href="icons/favicon.svg" />
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
@@ -20,12 +20,9 @@
           var licht =
             keuze === 'licht' ||
             (keuze === 'systeem' && window.matchMedia('(prefers-color-scheme: light)').matches)
-          if (licht) {
-            document.documentElement.classList.add('licht')
-            document
-              .querySelector('meta[name="theme-color"]')
-              .setAttribute('content', '#f6f5f4')
-          }
+          // De meta-tag theme-color blijft bewust op de donkere waarde staan:
+          // zie de uitleg in src/lib/thema.ts.
+          if (licht) document.documentElement.classList.add('licht')
         } catch (e) {
           // Geen opslag beschikbaar: dan start de app gewoon donker.
         }

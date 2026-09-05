@@ -16,12 +16,6 @@ export type ThemaEffectief = 'licht' | 'donker'
 
 export const THEMA_SLEUTEL = 'kracht.thema'
 
-/** Achtergrondkleur van de Android-statusbalk, per thema. */
-const STATUSBALK: Record<ThemaEffectief, string> = {
-  donker: '#101010',
-  licht: '#f6f5f4',
-}
-
 export function systeemThema(): ThemaEffectief {
   if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return 'donker'
   // Alleen een uitgesproken voorkeur voor licht maakt het licht. Weet het
@@ -35,12 +29,25 @@ export function bepaalThema(keuze: ThemaKeuze): ThemaEffectief {
   return systeemThema()
 }
 
+/*
+ * Over de statusbalk van je telefoon:
+ *
+ * Die wordt door twee dingen bepaald, en die moeten het eens zijn.
+ *  - De ACHTERGROND komt uit `theme_color` in het manifest. Die waarde legt
+ *    Android vast op het moment dat je de app installeert en is daarna niet
+ *    meer te wijzigen zonder opnieuw te installeren.
+ *  - De KLEUR VAN DE ICOONTJES leidt Android af uit de meta-tag `theme-color`
+ *    in de pagina, die we wél live kunnen aanpassen.
+ *
+ * Lieten we die meta meeschakelen met het thema, dan kreeg je in de lichte
+ * modus donkere icoontjes op een zwarte balk: onleesbaar. We laten de meta
+ * daarom staan op dezelfde donkere waarde als het manifest. De statusbalk is
+ * dus in beide thema's donker met lichte icoontjes — altijd leesbaar, en
+ * 's avonds in de sportschool geen witte balk in je gezicht.
+ */
 export function pasThemaToe(effectief: ThemaEffectief): void {
   if (typeof document === 'undefined') return
   document.documentElement.classList.toggle('licht', effectief === 'licht')
-  document
-    .querySelector('meta[name="theme-color"]')
-    ?.setAttribute('content', STATUSBALK[effectief])
 }
 
 export function bewaarKeuzeLokaal(keuze: ThemaKeuze): void {
