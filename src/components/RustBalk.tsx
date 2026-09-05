@@ -15,7 +15,7 @@ export function RustBalk() {
   return (
     <div className="shrink-0 px-3 pb-2">
       <div
-        className={`mx-auto max-w-[560px] overflow-hidden rounded-[12px] border shadow-[0_4px_18px_rgba(0,0,0,0.4)] ${
+        className={`mx-auto max-w-[560px] overflow-hidden rounded-[12px] border shadow-[var(--schaduw-zwevend)] ${
           klaar ? 'border-goed/50 bg-goed/10' : 'border-line-4 bg-surface-2'
         }`}
         role="timer"

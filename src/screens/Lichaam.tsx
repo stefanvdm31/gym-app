@@ -20,6 +20,7 @@ import {
 } from '../db/repo'
 import type { Measurement } from '../db/types'
 import { analyseerTempo, metWeekGemiddelde } from '../lib/bodyweight'
+import { GRAFIEK, GRAFIEK_AS, GRAFIEK_TOOLTIP } from '../lib/grafiek'
 import { korteDatum, vandaagIso } from '../lib/date'
 import { getal, leesGetal } from '../lib/format'
 import { Laden, Schil, SchermKop } from '../components/Schil'
@@ -107,29 +108,24 @@ export function Lichaam() {
               <div className="h-[130px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={grafiek} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
-                    <CartesianGrid stroke="#2e2e2e" vertical={false} />
+                    <CartesianGrid stroke={GRAFIEK.raster} vertical={false} />
                     <XAxis
                       dataKey="label"
-                      tick={{ fill: '#8e8b87', fontSize: 11 }}
+                      tick={GRAFIEK_AS}
                       axisLine={false}
                       tickLine={false}
                       minTickGap={28}
                     />
                     <YAxis
-                      tick={{ fill: '#8e8b87', fontSize: 11 }}
+                      tick={GRAFIEK_AS}
                       axisLine={false}
                       tickLine={false}
                       width={44}
                       domain={['dataMin - 1', 'dataMax + 1']}
                     />
                     <Tooltip
-                      contentStyle={{
-                        background: '#2c2c2c',
-                        border: '1px solid #3d3d3d',
-                        borderRadius: 8,
-                        fontSize: 13,
-                      }}
-                      labelStyle={{ color: '#cbc9c6' }}
+                      contentStyle={GRAFIEK_TOOLTIP.contentStyle}
+                      labelStyle={GRAFIEK_TOOLTIP.labelStyle}
                       formatter={(waarde, naam) => [
                         `${getal(Number(waarde), 1)} kg`,
                         naam === 'dag' ? 'weging' : 'weekgemiddelde',
@@ -138,7 +134,7 @@ export function Lichaam() {
                     <Line
                       type="monotone"
                       dataKey="dag"
-                      stroke="#3f3f3f"
+                      stroke={GRAFIEK.hulplijn}
                       strokeWidth={1.5}
                       dot={false}
                       isAnimationActive={false}
@@ -146,7 +142,7 @@ export function Lichaam() {
                     <Line
                       type="monotone"
                       dataKey="gemiddelde"
-                      stroke="#4c9ff0"
+                      stroke={GRAFIEK.lijn}
                       strokeWidth={2}
                       dot={false}
                       connectNulls
@@ -157,7 +153,7 @@ export function Lichaam() {
 
               <div className="flex items-center gap-3 border-t border-line-2 pt-3">
                 <span className="flex items-center gap-1.5">
-                  <span className="h-0.5 w-4 rounded bg-[#3f3f3f]" />
+                  <span className="h-0.5 w-4 rounded bg-ink-faint" />
                   <span className="t-caption text-ink-muted">per dag</span>
                 </span>
                 <span className="flex items-center gap-1.5">

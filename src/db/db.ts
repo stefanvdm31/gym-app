@@ -19,7 +19,7 @@ import type {
  * toekomstige wijziging dus ALTIJD een nieuwe version(n+1) toe en pas nooit
  * een bestaande aan — dan blijft alles wat je al gelogd hebt behouden.
  */
-export const HUIDIGE_SCHEMA_VERSIE = 1
+export const HUIDIGE_SCHEMA_VERSIE = 2
 
 class KrachtDatabase extends Dexie {
   muscleGroups!: EntityTable<MuscleGroup, 'id'>
@@ -43,6 +43,17 @@ class KrachtDatabase extends Dexie {
       measurements: 'datum',
       settings: 'id',
       meta: 'id',
+    })
+
+    // Versie 2: het thema is uitgebreid van alleen 'donker' naar een keuze
+    // tussen systeem, licht en donker. Wie de app al gebruikte stond op
+    // 'donker'; die zetten we op 'systeem', want dat is nu de standaard.
+    // De indexen veranderen niet, dus alleen deze omzetting is nodig.
+    this.version(2).upgrade(async (tx) => {
+      const instellingen = await tx.table('settings').get('settings')
+      if (instellingen === undefined) return
+      if (instellingen.thema === 'licht' || instellingen.thema === 'systeem') return
+      await tx.table('settings').put({ ...instellingen, thema: 'systeem' })
     })
   }
 }

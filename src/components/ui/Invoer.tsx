@@ -134,13 +134,57 @@ export function Schakelaar({
           aan ? 'border-accent bg-accent' : 'border-line-4 bg-surface-2'
         }`}
       >
+        {/* Uit staat het knopje op inktkleur: wit-op-wit is in de lichte
+            modus niet te zien. */}
         <span
-          className={`h-[22px] w-[22px] rounded-full bg-white transition-transform ${
-            aan ? 'translate-x-[22px]' : 'translate-x-0'
+          className={`h-[22px] w-[22px] rounded-full transition-transform ${
+            aan ? 'translate-x-[22px] bg-white' : 'translate-x-0 bg-ink'
           }`}
         />
       </span>
     </button>
+  )
+}
+
+/**
+ * Rij knoppen waarvan er precies één aan staat. Alles is meteen zichtbaar,
+ * dus je hoeft geen lijst open te klappen om te zien wat er te kiezen valt.
+ */
+export function Segment<T extends string>({
+  waarde,
+  opties,
+  onWijzig,
+  label,
+}: {
+  waarde: T
+  opties: Array<{ waarde: T; label: string }>
+  onWijzig: (v: T) => void
+  label: string
+}) {
+  return (
+    <div
+      role="radiogroup"
+      aria-label={label}
+      className="flex gap-1 rounded-[8px] border border-line-3 bg-surface-2 p-1"
+    >
+      {opties.map((optie) => {
+        const aan = optie.waarde === waarde
+        return (
+          <button
+            key={optie.waarde}
+            type="button"
+            role="radio"
+            aria-checked={aan}
+            onClick={() => onWijzig(optie.waarde)}
+            className={`t-body-sm min-h-[48px] flex-1 rounded-[5px] px-2 font-medium transition-colors ${
+              aan ? 'bg-accent text-white' : 'text-ink-2 hover:bg-ink/[0.05]'
+            }`}
+          >
+            {optie.label}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 

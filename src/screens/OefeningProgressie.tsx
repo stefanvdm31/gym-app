@@ -14,6 +14,7 @@ import { db } from '../db/db'
 import { haalHistorieVanOefening, haalVorigeSets } from '../db/repo'
 import { besteRecords, epley } from '../lib/pr'
 import { vorigeUitvoeringUitSets, watNogNodig } from '../lib/progression'
+import { GRAFIEK, GRAFIEK_AS, GRAFIEK_TOOLTIP } from '../lib/grafiek'
 import { korteDatum } from '../lib/date'
 import { getal, kg } from '../lib/format'
 import { Laden, Schil, SubKop } from '../components/Schil'
@@ -128,37 +129,32 @@ export function OefeningProgressie() {
           <div className="h-[150px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={punten} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
-                <CartesianGrid stroke="#2e2e2e" vertical={false} />
+                <CartesianGrid stroke={GRAFIEK.raster} vertical={false} />
                 <XAxis
                   dataKey="label"
-                  tick={{ fill: '#8e8b87', fontSize: 11 }}
+                  tick={GRAFIEK_AS}
                   axisLine={false}
                   tickLine={false}
                   minTickGap={24}
                 />
                 <YAxis
-                  tick={{ fill: '#8e8b87', fontSize: 11 }}
+                  tick={GRAFIEK_AS}
                   axisLine={false}
                   tickLine={false}
                   width={44}
                   domain={['dataMin - 3', 'dataMax + 3']}
                 />
                 <Tooltip
-                  contentStyle={{
-                    background: '#2c2c2c',
-                    border: '1px solid #3d3d3d',
-                    borderRadius: 8,
-                    fontSize: 13,
-                  }}
-                  labelStyle={{ color: '#cbc9c6' }}
+                  contentStyle={GRAFIEK_TOOLTIP.contentStyle}
+                  labelStyle={GRAFIEK_TOOLTIP.labelStyle}
                   formatter={(waarde) => [`${getal(Number(waarde), 1)} ${eenheid}`, '']}
                 />
                 <Line
                   type="monotone"
                   dataKey={grafiekSleutel}
-                  stroke="#4c9ff0"
+                  stroke={GRAFIEK.lijn}
                   strokeWidth={2}
-                  dot={{ r: 2.5, fill: '#4c9ff0' }}
+                  dot={{ r: 2.5, fill: GRAFIEK.lijn }}
                   activeDot={{ r: 4 }}
                 />
               </LineChart>

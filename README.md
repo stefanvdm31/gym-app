@@ -53,7 +53,7 @@ npm test
 ```
 
 `npm test` controleert de rekenkant van de app: het progressieadvies, je records, de
-schijvencalculator, je weekgemiddelde en de weeknummers. Zie je `24 passed`, dan
+schijvencalculator, je weekgemiddelde en de weeknummers. Zie je `27 passed`, dan
 klopt de rekenkant. Zie je een rood `failed`, dan is er iets stuk en kun je beter
 niet publiceren.
 
@@ -186,12 +186,29 @@ Waar je wat aanpast:
 | Trainingsdagen en hun volgorde | Meer → Schema's |
 | Spiergroepen waarop je settelling optelt | Meer → Spiergroepen |
 | Startdatum, deloadweken, stang en schijven, doeltempo | Meer → Instellingen |
+| Licht of donker thema | Meer → Instellingen → Weergave |
 
 Een oefening die je niet meer doet **archiveer** je in plaats van verwijderen. Hij
 verdwijnt dan uit je keuzelijsten, maar je oude trainingen blijven leesbaar.
 
 Hernoem je een oefening, dan houden oude trainingen de oude naam. Dat is met opzet:
 zo blijft je historie kloppen met wat je destijds deed.
+
+### Licht en donker
+
+Onder Meer → Instellingen → Weergave kies je tussen **Systeem**, **Licht** en **Donker**.
+
+Standaard staat hij op Systeem: de app volgt dan de instelling van je telefoon en
+schakelt vanzelf mee als die ’s avonds naar donker gaat. Je hoeft er dan nooit meer
+naar om te kijken. Wil je het vastzetten, kies dan Licht of Donker.
+
+Beide thema’s komen uit hetzelfde ontwerp. Blauw, groen en oranje zijn in de lichte
+modus donkerder: de lichte varianten zijn op een witte achtergrond niet goed genoeg
+leesbaar. Elke tekstkleur haalt in beide modi minstens 4,5:1 contrast.
+
+Eén ding kan de app niet regelen: het opstartscherm dat Android laat zien bij het
+openen van de geïnstalleerde app. Die kleur wordt vastgelegd op het moment dat je de
+app installeert en blijft dus donker, ook als je op licht staat.
 
 ### Hoe het progressieadvies werkt
 

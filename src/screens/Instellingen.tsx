@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 
 import { haalInstellingen, wijzigInstellingen } from '../db/repo'
-import type { GewichtsDoel } from '../db/types'
+import type { GewichtsDoel, ThemaKeuze } from '../db/types'
 import { isDeloadWeek, programmaWeek, vandaagIso } from '../lib/date'
 import { getal, leesGetal } from '../lib/format'
 import { Laden, Schil, SubKop } from '../components/Schil'
 import { Badge, Kaart, Melding, Wenkbrauw } from '../components/ui/basis'
 import { Knop } from '../components/ui/Knop'
-import { GetalStapper, Keuze, Schakelaar, TekstVeld, Veld } from '../components/ui/Invoer'
+import { GetalStapper, Keuze, Schakelaar, Segment, TekstVeld, Veld } from '../components/ui/Invoer'
 
 export function Instellingen() {
   const instellingen = useLiveQuery(() => haalInstellingen(), [])
@@ -35,6 +35,31 @@ export function Instellingen() {
       <SubKop titel="Instellingen" />
 
       <div className="flex flex-col gap-4 pt-4">
+        {/* Weergave */}
+        <Kaart className="flex flex-col gap-4 p-3.5">
+          <Wenkbrauw>Weergave</Wenkbrauw>
+
+          <Veld
+            label="Thema"
+            hulp={
+              instellingen.thema === 'systeem'
+                ? 'De app volgt de instelling van je telefoon en gaat dus mee als die ’s avonds naar donker schakelt.'
+                : `Vastgezet op ${instellingen.thema}. Zet op Systeem om je telefoon te laten bepalen.`
+            }
+          >
+            <Segment<ThemaKeuze>
+              waarde={instellingen.thema}
+              label="Thema"
+              opties={[
+                { waarde: 'systeem', label: 'Systeem' },
+                { waarde: 'licht', label: 'Licht' },
+                { waarde: 'donker', label: 'Donker' },
+              ]}
+              onWijzig={(v) => wijzig({ thema: v })}
+            />
+          </Veld>
+        </Kaart>
+
         {/* Programma */}
         <Kaart className="flex flex-col gap-4 p-3.5">
           <Wenkbrauw>Programma</Wenkbrauw>

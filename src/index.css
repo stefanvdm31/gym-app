@@ -1,8 +1,14 @@
 @import 'tailwindcss';
 
 /*
- * Designtokens uit het ontwerp "donker grafiet".
- * Wil je de app een andere tint geven, dan verander je alleen hier iets.
+ * Designtokens.
+ *
+ * Hieronder staat het donkere thema ("donker grafiet"). Verderop staat het
+ * lichte thema ("warm papier") dat dezelfde tokens overschrijft zodra
+ * <html> de klasse `licht` krijgt. Elk scherm gebruikt alleen deze namen, dus
+ * één set omwisselen kleurt de hele app om.
+ *
+ * Wil je een tint bijstellen, doe dat dan hier en nergens anders.
  */
 @theme {
   --color-canvas: #101010;
@@ -29,6 +35,8 @@
   --color-accent-soft: #7bb8f5;
 
   --color-goed: #45c65e;
+  /* Tekst op een zacht groen vlak, zoals de recordpil. */
+  --color-goed-tekst: #45c65e;
   --color-let-op: #f08a3c;
   --color-let-op-tekst: #e6b389;
   --color-fout: #f0645b;
@@ -42,9 +50,60 @@
   --radius-xl: 16px;
 }
 
+/*
+ * Licht thema: "warm papier".
+ *
+ * Een zachte gebroken witte pagina met witte kaarten erop, bijna-zwarte tekst.
+ * Blauw, groen, oranje en rood zijn hier donkerder dan in het donkere thema:
+ * de lichte varianten van die kleuren halen op wit geen leesbaar contrast.
+ * Elke tekstkleur hieronder haalt minstens 4,5:1, ook op de kaartranden.
+ */
+:root.licht {
+  --color-canvas: #f6f5f4;
+  --color-shell: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #f1efed;
+  --color-surface-dim: #edebe9;
+  --color-surface-3: #e4e1de;
+
+  --color-line: #e6e4e1;
+  --color-line-2: #e3e0dd;
+  --color-line-3: #dcd9d5;
+  --color-line-4: #cbc7c2;
+  --color-line-5: #b0aba5;
+
+  --color-ink: #1a1a19;
+  --color-ink-2: #3d3b38;
+  --color-ink-muted: #6b6763;
+  --color-ink-faint: #736e69;
+
+  --color-accent: #0070d1;
+  --color-accent-hover: #0062b5;
+  --color-accent-press: #005799;
+  --color-accent-soft: #0062b5;
+
+  --color-goed: #157f31;
+  --color-goed-tekst: #116828;
+  --color-let-op: #a2510a;
+  --color-let-op-tekst: #7a3d08;
+  --color-fout: #c02a20;
+}
+
 @layer base {
+  /*
+   * Schaduwen verschillen per thema: op een donkere ondergrond mag zwart
+   * stevig zijn, op papier wordt datzelfde zwart meteen een vlek.
+   */
   :root {
     color-scheme: dark;
+    --schaduw-zwevend: 0 4px 18px rgba(0, 0, 0, 0.42);
+    --schaduw-hoog: 0 6px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  :root.licht {
+    color-scheme: light;
+    --schaduw-zwevend: 0 4px 14px rgba(26, 26, 25, 0.1);
+    --schaduw-hoog: 0 8px 22px rgba(26, 26, 25, 0.15);
   }
 
   html,

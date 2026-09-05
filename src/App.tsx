@@ -9,6 +9,7 @@ import { Laden } from './components/Schil'
 import { ToastProvider } from './state/ToastContext'
 import { RustTimerProvider } from './state/RustTimer'
 import { VernieuwMelding } from './components/VernieuwMelding'
+import { useThema } from './state/useThema'
 
 // De schermen met grafieken laden we pas als je ze opent: dat scheelt
 // laadtijd op het trainingsscherm, waar het er echt toe doet.
@@ -47,6 +48,7 @@ export default function App() {
   }, [])
 
   const instellingen = useLiveQuery(() => haalInstellingen(), [])
+  useThema(instellingen?.thema)
 
   if (startFout !== null) {
     return (

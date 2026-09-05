@@ -7,6 +7,7 @@ import { berekenSchijven } from './plates'
 import { analyseerTempo, metWeekGemiddelde } from './bodyweight'
 import { isDeloadWeek, maandagVan, programmaWeek } from './date'
 import { normaliseerYoutube } from './youtube'
+import { bepaalThema, themaLabel } from './thema'
 import { tellSetsPerSpiergroep } from './volume'
 import type { Session } from '../db/types'
 
@@ -325,5 +326,24 @@ describe('youtube-links', () => {
     expect(normaliseerYoutube('https://vimeo.com/12345')).toBeNull()
     expect(normaliseerYoutube('zomaar wat tekst')).toBeNull()
     expect(normaliseerYoutube('')).toBeNull()
+  })
+})
+
+describe('thema', () => {
+  it('respecteert een vastgezette keuze', () => {
+    expect(bepaalThema('licht')).toBe('licht')
+    expect(bepaalThema('donker')).toBe('donker')
+  })
+
+  it('valt terug op donker als het toestel geen voorkeur kan doorgeven', () => {
+    // In deze testomgeving bestaat matchMedia niet. Donker is dan de veilige
+    // uitkomst: liever te donker in de sportschool dan een lichtflits.
+    expect(bepaalThema('systeem')).toBe('donker')
+  })
+
+  it('geeft elke keuze een leesbaar label', () => {
+    expect(themaLabel('systeem')).toBe('Volg systeem')
+    expect(themaLabel('licht')).toBe('Licht')
+    expect(themaLabel('donker')).toBe('Donker')
   })
 })

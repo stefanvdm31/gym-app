@@ -66,7 +66,7 @@ export function IcoonKnop({
     <button
       type="button"
       aria-label={label}
-      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-white/5 ${className}`}
+      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-ink/[0.06] ${className}`}
       {...rest}
     >
       {children}

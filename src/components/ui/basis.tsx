@@ -137,7 +137,7 @@ export function Rij({
   if (onClick === undefined) return <div className={basis}>{inhoud}</div>
 
   return (
-    <button type="button" onClick={onClick} className={`${basis} text-left hover:bg-white/[0.03]`}>
+    <button type="button" onClick={onClick} className={`${basis} text-left hover:bg-ink/[0.04]`}>
       {inhoud}
     </button>
   )

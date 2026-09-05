@@ -150,6 +150,8 @@ export interface Measurement {
   notitie: string
 }
 
+export type ThemaKeuze = 'systeem' | 'licht' | 'donker'
+
 export type GewichtsDoel = 'afvallen' | 'aankomen' | 'behouden'
 
 export interface Settings {
@@ -171,7 +173,7 @@ export interface Settings {
   wakeLockAan: boolean
   geluidAan: boolean
   trillenAan: boolean
-  thema: 'donker'
+  thema: ThemaKeuze
   laatsteBackupOp?: IsoTijd
 }
 

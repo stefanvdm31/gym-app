@@ -12,7 +12,7 @@ export function RecordPil({ waarde, sluit }: { waarde: string; sluit: boolean })
       <div
         role="status"
         aria-live="polite"
-        className={`flex max-w-full items-center gap-2.5 rounded-full border border-goed/45 bg-[color-mix(in_srgb,var(--color-goed)_16%,var(--color-surface-2))] py-2.5 pr-4 pl-3.5 shadow-[0_6px_20px_rgba(0,0,0,0.5),0_0_0_1px_rgba(69,198,94,0.18)] ${
+        className={`flex max-w-full items-center gap-2.5 rounded-full border border-goed/45 bg-[color-mix(in_srgb,var(--color-goed)_16%,var(--color-surface-2))] py-2.5 pr-4 pl-3.5 shadow-[var(--schaduw-hoog)] ${
           sluit ? 'pil-weg' : 'pil-binnen'
         }`}
       >
@@ -20,7 +20,7 @@ export function RecordPil({ waarde, sluit }: { waarde: string; sluit: boolean })
           🔥
         </span>
         <span className="t-body-sm min-w-0 truncate">
-          <span className="text-goed">Lekker! Nieuw PR: </span>
+          <span className="text-goed-tekst">Lekker! Nieuw PR: </span>
           <span className="cijfers font-semibold text-ink">{waarde}</span>
         </span>
       </div>

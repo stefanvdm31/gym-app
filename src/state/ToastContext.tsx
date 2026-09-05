@@ -92,7 +92,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`flex max-w-[420px] items-center gap-2.5 rounded-[12px] border px-3.5 py-2.5 shadow-[0_4px_18px_rgba(0,0,0,0.45)] ${
+            className={`flex max-w-[420px] items-center gap-2.5 rounded-[12px] border px-3.5 py-2.5 shadow-[var(--schaduw-zwevend)] ${
               t.toon === 'fout'
                 ? 'border-fout/40 bg-fout/12 text-fout'
                 : 'border-line-4 bg-surface-2 text-ink'

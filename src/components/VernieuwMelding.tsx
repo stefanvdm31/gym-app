@@ -27,7 +27,7 @@ export function VernieuwMelding() {
 
   return (
     <div className="fixed inset-x-0 top-0 z-[70] flex justify-center px-4 pt-[max(env(safe-area-inset-top),8px)]">
-      <div className="flex w-full max-w-[520px] items-center gap-3 rounded-[12px] border border-accent/40 bg-surface-2 px-3.5 py-3 shadow-[0_4px_18px_rgba(0,0,0,0.5)]">
+      <div className="flex w-full max-w-[520px] items-center gap-3 rounded-[12px] border border-accent/40 bg-surface-2 px-3.5 py-3 shadow-[var(--schaduw-hoog)]">
         <div className="min-w-0 flex-1">
           <div className="t-body-sm font-semibold text-ink">Nieuwe versie klaar</div>
           <div className="t-caption text-ink-muted">Je gegevens blijven staan.</div>

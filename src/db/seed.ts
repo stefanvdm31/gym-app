@@ -509,7 +509,7 @@ export function standaardInstellingen(): Settings {
     wakeLockAan: true,
     geluidAan: true,
     trillenAan: true,
-    thema: 'donker',
+    thema: 'systeem',
   }
 }
 
